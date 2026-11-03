@@ -1,135 +1,80 @@
-# Greedy Adventures — Sea View Skydiving Full-Stack Prototype
+# Greedy Adventures — Sea View Skydiving Prototype
 
-A full-stack Next.js + TypeScript web application built for the **Greedy Adventures Full-Stack Developer Assignment**. It features a redesigned editorial landing page for the **Sea View Skydiving** experience in Pattaya, Thailand, an AI customer chatbot powered by **Google Gemini** and `assistant-ui`, and a real-time **Read-Only Knowledge View** connected to the backend.
-
----
-
-## 🚀 Quick Setup & Running Locally
-
-1. **Clone & Install Dependencies**:
-   ```bash
-   npm install
-   ```
-
-2. **Configure Environment Variables (Optional for Live Gemini API)**:
-   Copy `.env.example` to `.env.local`:
-   ```bash
-   cp .env.example .env.local
-   ```
-   Add your Google Gemini API key from [Google AI Studio](https://aistudio.google.com/):
-   ```env
-   GEMINI_API_KEY=your_gemini_api_key_here
-   ```
-   > **Note on Mock Mode**: If `GEMINI_API_KEY` is not provided, the application runs in an **Intelligent Mock Mode** that fulfills all assignment test cases without requiring API credits, and is clearly labeled in responses and the dashboard.
-
-3. **Start the Development Server**:
-   ```bash
-   npm run dev
-   ```
-   Open [http://localhost:3000](http://localhost:3000) in your browser.
+Full-stack Next.js + TypeScript prototype for the **Greedy Adventures Assignment**. Features a redesigned editorial landing page for the **Sea View Skydiving** experience, an AI customer chatbot powered by **Google Gemini 2.5 Flash**, and a live **Read-Only Knowledge View**.
 
 ---
 
-## 📁 Architecture & File Structure
+## ⚡ Quick Setup
 
-```
-demo/
-├── app/
-│   ├── api/
-│   │   ├── chat/route.ts         # POST /api/chat - Validates input, passes context to Gemini, returns response + attachments + citations
-│   │   └── knowledge/route.ts    # GET & POST /api/knowledge - Live sources, media inventory, and test-question inspector
-│   ├── knowledge/page.tsx        # Read-only Knowledge View dashboard (/knowledge)
-│   ├── globals.css               # Tailwind CSS v4 theme & typography
-│   ├── layout.tsx                # Next.js Root Layout with Bebas Neue display fonts
-│   └── page.tsx                  # Redesigned Sea View Skydiving landing page
-├── components/
-│   ├── chat/
-│   │   ├── ChatWidget.tsx        # Floating AI chat drawer with assistant-ui primitives
-│   │   ├── MediaAttachmentRenderer.tsx # PDF (open/download) & video player renderers
-│   │   └── SourceCitations.tsx   # Source citations with anchor links
-│   ├── hero/
-│   │   └── HeroSection.tsx       # Autoplay video background, dual CTAs, pricing hook
-│   ├── navigation/
-│   │   ├── Navbar.tsx            # Sticky brand navbar with Knowledge View shortcut
-│   │   └── SubNav.tsx            # Sticky in-page quick nav (Packages, Plan, Details, Good to Know)
-│   ├── sections/
-│   │   ├── GlimpseSection.tsx    # "SEE IT. FEEL IT." editorial section
-│   │   ├── PackagesSection.tsx   # 3-tier pricing (ECO, featured DELUXE, VIP)
-│   │   ├── PlanSection.tsx       # 4-step linear day itinerary
-│   │   ├── DetailsSection.tsx    # "The Specifics" vs "Before You Book" tables
-│   │   ├── CtaSection.tsx        # "See Pattaya From Above" conversion banner
-│   │   └── Footer.tsx            # Dropzone info & legal links
-│   └── KeyMetricsBar.tsx         # Floating 4-part specs bar (Location, Jump Type, Altitude, Duration)
-├── lib/
-│   ├── ai/
-│   │   ├── gemini.ts             # Google Gen AI SDK integration & labeled mock fallback
-│   │   └── types.ts              # ChatMessage, MediaItem, SourceCitation interfaces
-│   └── knowledge/
-│       ├── sources.ts            # Official Pattaya website knowledge base
-│       ├── media.ts              # Media inventory (brochure PDF, hero video)
-│       └── retriever.ts          # Intent detection, knowledge retrieval, prompt builder
-└── public/
-    ├── documents/
-    │   └── sea-view-skydiving-brochure.pdf # 3-page official experience brochure
-    ├── images/                   # Cropped high-res experience photos
-    └── hero.mp4                  # Actual 13,000 FT ocean tandem jump preview video
+```bash
+# 1. Install dependencies
+npm install
+
+# 2. Add your Gemini API key in .env.local
+GEMINI_API_KEY=your_gemini_api_key_here
+
+# 3. Run development server
+npm run dev
 ```
 
----
-
-## 🤖 Agent Flow & AI Model Logic
-
-1. **Customer Query**: The user asks a question via the floating chat widget or quick prompt pills.
-2. **Intent & Keyword Analysis** (`lib/knowledge/retriever.ts`):
-   - **Brochure Request**: Detects intent for PDF/document downloads.
-   - **Video Request**: Detects intent for video previews/footage.
-   - **Both**: Attaches both PDF brochure and experience video.
-   - **Topic Matching**: Selects specific knowledge chunks (Packages, Itinerary, Eligibility, Location).
-3. **Grounding & Context Injection**:
-   - Compiles retrieved knowledge chunks into the system context.
-   - Injects instructions: *Never invent facts; cite sources; reference attached media; maintain Greedy Adventures persona.*
-4. **Model Execution** (`lib/ai/gemini.ts`):
-   - **Live Mode**: Calls `gemini-1.5-flash` via `@google/generative-ai`.
-   - **Mock Mode**: Returns grounded answers clearly labeled `(Mock Mode — Set GEMINI_API_KEY for Live API)`.
-5. **Safe Response Rendering**:
-   - Renders text with citations linking to relevant landing page sections.
-   - Renders PDF cards with **Open in New Tab** and **Download PDF** buttons.
-   - Renders HTML5 video player with inline playback and full-screen links.
-   - Labels demo media with `Demo Material` badges.
+Open **`http://localhost:3000`** in your browser.
 
 ---
 
-## 🔍 How to Open & Use the Knowledge View
+## 🌐 Website Sources Loaded
+
+Content is grounded in the official Greedy Adventures experience page:
+- **Base URL**: [`https://www.greedyadventures.com/experiences/sea-view-skydiving`](https://www.greedyadventures.com/experiences/sea-view-skydiving)
+- **Sections Ingested**:
+  - `Overview`: Tandem jump over Pattaya coast, 13,000 FT altitude, ~3h duration, starting ฿9,500.
+  - `Packages`: ECO (฿9,500), Deluxe (฿12,500), and VIP (฿14,000) inclusions.
+  - `The Plan`: 5-step itinerary (Arrival &rarr; Briefing &rarr; Boarding &rarr; Freefall &rarr; Canopy Landing).
+  - `Details & Good to Know`: Bangkok pickup add-on, 100 kg weight threshold, minimum age 14+, weather policy.
+  - `Dropzone Location`: Dropzone Thailand, 95 M.4, Chakphong, Klaeng District, Rayong 21190.
+
+---
+
+## 🤖 Agent Flow & Media Delivery
+
+```
+User Query ──► Intent & Topic Retrieval ──► Grounded Gemini 2.5 Flash ──► Rich UI Response
+                      │                                                        │
+                      ├──► Requests Brochure ──► Attaches PDF Card (Open/Download)
+                      └──► Requests Video    ──► Attaches HTML5 Video Player
+```
+
+- **Model**: `gemini-2.5-flash` via `@google/generative-ai`.
+- **Media Catalog**:
+  - **Brochure (PDF)**: `public/documents/sea-view-skydiving-brochure.pdf` (1.4 MB).
+  - **Experience Video (MP4)**: `public/hero.mp4` (Actual 13,000 FT ocean jump preview).
+- **Safe Handling**: Secrets stay server-side; missing info triggers a polite fallback instead of hallucinations; sources are cited with direct anchor links.
+
+---
+
+## 🔍 How to Open the Knowledge View
 
 Navigate to **`/knowledge`** or click **`KNOWLEDGE [AI VIEW]`** in the top navigation bar.
 
-The Knowledge View provides:
-1. **Real-Time Activity Inspector**:
-   - Type any question or click a preset test scenario.
-   - Shows the exact backend intent detected.
-   - Shows which media files were selected.
-   - Shows the **exact knowledge chunks passed to the Gemini model in the prompt**.
-2. **Website Sources Catalog**: Lists all 6 website knowledge sources with title, URL, capture date, category, and expandable text chunks.
-3. **Media Catalog**: Lists available brochure PDFs and preview videos with file sizes, durations, and download links.
+- **Sources Catalog**: Inspect all raw website chunks loaded into the chatbot.
+- **Media Inventory**: Review available brochure PDFs and preview videos with demo labels.
+- **Real-Time Activity Inspector**: Run any test query to see the **exact source text chunks and media files passed into the model prompt**.
 
 ---
 
-## ✅ Verification Steps (Assignment Rubric)
+## ✅ Repeatable Verification Steps
 
-| Test Scenario | Input Query | Expected Result | Verified Behavior |
-| :--- | :--- | :--- | :--- |
-| **1. Package Inclusions** | *"What is included in the package?"* | Text response detailing ECO, Deluxe, and VIP tiers with citations. No media. | ✅ Passed (0 attachments, 3 citations) |
-| **2. Brochure Request** | *"Can you send me a brochure?"* | Text response + PDF card with Open and Download buttons. | ✅ Passed (1 PDF attachment: `sea-view-skydiving-brochure.pdf`) |
-| **3. Video Request** | *"Can I see a video of the experience?"* | Text response + embedded video player preview. | ✅ Passed (1 Video attachment: `hero.mp4`) |
-| **4. Dual Request** | *"Send me the brochure and a video."* | Text response + both PDF brochure card and video player. | ✅ Passed (2 attachments: PDF + Video) |
-| **5. Follow-Up Questions** | *"What about the weight limit?"* | Remembers conversation context; answers with 100 kg limit and medical guidelines. | ✅ Passed |
-| **6. Missing Information** | *"Can I jump with my pet dog?"* | States that the information is unavailable on the website rather than hallucinating. | ✅ Passed |
-| **7. Backend Inspector** | Inspect on `/knowledge` | Reflects real backend activity and exact text passed to Gemini. | ✅ Passed |
+| # | Test Prompt | Expected Chatbot Behavior |
+| :--- | :--- | :--- |
+| **1** | *"What is included in the package?"* | Returns clear text breakdown of ECO, Deluxe, and VIP tiers with citations. No media attachments. |
+| **2** | *"Can you send me a brochure?"* | Returns answer + official brochure card with **Open in New Tab** and **Download PDF** buttons. |
+| **3** | *"Can I see a video of the experience?"* | Returns answer + playable HTML5 video preview in chat. |
+| **4** | *"Send me the brochure and a video."* | Returns answer + **both** the PDF card and the video player. |
+| **5** | *"What about the weight limit?"* | Remembers context; explains 100 kg limit and 90–100 kg instructor assessment. |
+| **6** | *"Can I jump with my pet dog?"* | Fallback: States the info is unavailable on the website rather than making it up. |
 
 ---
 
-## 🔒 Security & Safe Handling
+## ⚠️ Limitations & AI Assistance
 
-- **Server-Side API Key**: `GEMINI_API_KEY` is accessed only within Node.js runtime server routes (`app/api/chat/route.ts`).
-- **Input Validation**: Rejects empty payloads, validates message array shapes, and escapes output.
-- **Privacy in Knowledge View**: No API keys, tokens, or private conversation histories are exposed in `/knowledge`.
+- **Limitations**: Prototype scope. Does not process live credit card transactions or book real calendar slots.
+- **AI Assistance**: Built with assistance from Google Antigravity / Gemini for rapid layout structuring, component separation, and API wiring. All code, types, and logic were reviewed and tested.
